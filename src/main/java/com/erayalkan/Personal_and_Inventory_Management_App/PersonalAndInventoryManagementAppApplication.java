@@ -10,4 +10,5 @@ public class PersonalAndInventoryManagementAppApplication {
 		SpringApplication.run(PersonalAndInventoryManagementAppApplication.class, args);
 	}
 
+
 }

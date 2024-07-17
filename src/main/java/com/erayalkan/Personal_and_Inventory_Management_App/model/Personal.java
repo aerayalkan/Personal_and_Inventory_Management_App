@@ -190,5 +190,4 @@ public class Personal {
         this.profilePicture = profilePicture;
     }
 
-
 }

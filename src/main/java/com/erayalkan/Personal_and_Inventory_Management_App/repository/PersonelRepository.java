@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 
 public interface PersonelRepository extends JpaRepository<Personal, Long> {
+
 }
