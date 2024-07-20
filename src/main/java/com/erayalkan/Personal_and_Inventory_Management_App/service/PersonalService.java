@@ -45,6 +45,7 @@ public class PersonalService {
             existingPersonal.setDepartment(personal.getDepartment());
             existingPersonal.setPosition(personal.getPosition());
             existingPersonal.setStillWork(personal.isStillWork());
+            existingPersonal.setRoles(personal.getRoles());
             return PersonelRepository.save(existingPersonal);
         }
         return null;

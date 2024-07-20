@@ -3,6 +3,8 @@ package com.erayalkan.Personal_and_Inventory_Management_App.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Personal {
@@ -50,6 +52,10 @@ public class Personal {
 
     private String profilePicture;
 
+    @NotNull
+    @ElementCollection(fetch = FetchType.EAGER)
+    private Set<String> roles;
+
 
     //getters Setters
 
@@ -70,7 +76,9 @@ public class Personal {
         this.position = position;
         this.stillWork = stillWork;
         this.profilePicture = profilePicture;
+        this.roles = roles !=null ? roles : new HashSet<>();
     }
+
 
     //getters and setters
 
@@ -189,4 +197,14 @@ public class Personal {
     public void setProfilePicture(String profilePicture) {
         this.profilePicture = profilePicture;
     }
+
+    //roles
+    public Set<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<String> roles) {
+        this.roles = roles != null ? roles : new HashSet<>();
+    }
+
 }
