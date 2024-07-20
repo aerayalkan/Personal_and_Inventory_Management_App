@@ -189,5 +189,4 @@ public class Personal {
     public void setProfilePicture(String profilePicture) {
         this.profilePicture = profilePicture;
     }
-
 }

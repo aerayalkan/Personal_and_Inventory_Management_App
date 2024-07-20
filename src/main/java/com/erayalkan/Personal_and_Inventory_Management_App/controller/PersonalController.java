@@ -42,5 +42,14 @@ public class PersonalController {
         personalService.deletePersonal(id);
     }
 
+    @GetMapping("/search")
+    public List<Personal> searchPersonal(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String surname,
+            @RequestParam(required = false) String tckn,
+            @RequestParam(required = false) String department) {
+        return personalService.searchPersonals(name,surname,tckn,department);
+    }
+
 
 }
