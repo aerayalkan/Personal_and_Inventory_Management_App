@@ -25,9 +25,9 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 @EnableWebSecurity
 public class SecurityConfig {
 
+    @Autowired
+    private JwtUtil jwtUtil;
+
+
+
     }
-
-
-
-
-}
