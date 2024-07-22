@@ -1,5 +1,6 @@
 package com.erayalkan.Personal_and_Inventory_Management_App.model;
 
+import com.erayalkan.Personal_and_Inventory_Management_App.validator.ValidPassword;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.util.Date;
@@ -56,6 +57,10 @@ public class Personal {
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<String> roles;
 
+    @NotBlank
+    @ValidPassword
+    @Column(nullable = false)
+    private String password;
 
     //getters Setters
 
@@ -63,7 +68,7 @@ public class Personal {
     public Personal() {
     }
     public Personal(String name, String surname, String gender, Date birthdayDate,String maritalStatus, String tckn, int employeeNumber,
-                    String educationalStatus, String department, String position, boolean stillWork, String profilePicture) {
+                    String educationalStatus, String department, String position, boolean stillWork, String profilePicture,String password) {
         this.name = name;
         this.surname = surname;
         this.gender = gender;
@@ -77,6 +82,7 @@ public class Personal {
         this.stillWork = stillWork;
         this.profilePicture = profilePicture;
         this.roles = roles !=null ? roles : new HashSet<>();
+        this.password = password;
     }
 
 
@@ -205,6 +211,15 @@ public class Personal {
 
     public void setRoles(Set<String> roles) {
         this.roles = roles != null ? roles : new HashSet<>();
+    }
+
+    //Password
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
 }

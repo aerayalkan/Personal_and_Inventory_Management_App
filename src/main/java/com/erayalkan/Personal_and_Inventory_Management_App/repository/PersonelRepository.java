@@ -15,4 +15,6 @@ public interface PersonelRepository extends JpaRepository<Personal, Long> {
             "(?3 IS NULL OR p.tckn = ?3) AND " +
             "(?4 IS NULL OR p.department = ?4)")
     List<Personal> search(String name, String surname, String tckn, String department);
+    Personal findByEmployeeNumber(String employeeNumber);
+    boolean existsByEmployeeNumber(String employeeNumber);
 }
