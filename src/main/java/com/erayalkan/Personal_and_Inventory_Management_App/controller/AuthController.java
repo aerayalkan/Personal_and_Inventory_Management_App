@@ -1,3 +1,4 @@
+/*
 package com.erayalkan.Personal_and_Inventory_Management_App.controller;
 
 import com.erayalkan.Personal_and_Inventory_Management_App.model.Personal;
@@ -68,3 +69,5 @@ class AuthRequest {
         this.password = password;
     }
 }
+
+ */

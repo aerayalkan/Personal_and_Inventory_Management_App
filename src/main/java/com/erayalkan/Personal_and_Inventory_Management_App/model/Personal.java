@@ -3,12 +3,16 @@ package com.erayalkan.Personal_and_Inventory_Management_App.model;
 import com.erayalkan.Personal_and_Inventory_Management_App.validator.ValidPassword;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.*;
 
 @Entity
-public class Personal {
+@Table(name = "personal")
+public class Personal implements UserDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -22,7 +26,7 @@ public class Personal {
     private String surname;
 
     @NotNull
-    @Size(min = 1,max = 1)
+    @Size(min = 1, max = 1)
     private String gender;
 
     @Temporal(TemporalType.DATE)
@@ -32,13 +36,11 @@ public class Personal {
     @NotNull
     private String maritalStatus;
 
-    @NotNull
-    @Size(min=11, max =11)
-    @Column(unique = true)
+    @Column(nullable = false, unique = true)
     private String tckn;
 
     @NotNull
-    private int employeeNumber;
+    private String employeeNumber;
 
     private String educationalStatus;
 
@@ -55,165 +57,51 @@ public class Personal {
 
     @NotNull
     @ElementCollection(fetch = FetchType.EAGER)
-    private Set<String> roles;
+    private Set<String> roles = new HashSet<>();
 
     @NotBlank
     @ValidPassword
     @Column(nullable = false)
     private String password;
 
-    //getters Setters
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Token> tokens = new ArrayList<>();
 
-
-    public Personal() {
-    }
-    public Personal(String name, String surname, String gender, Date birthdayDate,String maritalStatus, String tckn, int employeeNumber,
-                    String educationalStatus, String department, String position, boolean stillWork, String profilePicture,String password) {
-        this.name = name;
-        this.surname = surname;
-        this.gender = gender;
-        this.birthdayDate = birthdayDate;
-        this.maritalStatus = maritalStatus;
-        this.tckn = tckn;
-        this.employeeNumber = employeeNumber;
-        this.educationalStatus = educationalStatus;
-        this.department = department;
-        this.position = position;
-        this.stillWork = stillWork;
-        this.profilePicture = profilePicture;
-        this.roles = roles !=null ? roles : new HashSet<>();
-        this.password = password;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+        for (String role : roles) {
+            authorities.add(new SimpleGrantedAuthority(role));
+        }
+        return authorities;
     }
 
-
-    //getters and setters
-
-    //id
-    public long getId() {
-        return id;
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
     }
 
-    //name
-    public String getName() {
-        return name;
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
-    //surname
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    //gender
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    //birthdayDate
-    public Date getBirthdayDate() {
-        return birthdayDate;
-    }
-
-    public void setBirthdayDate(Date birthdayDate) {
-        this.birthdayDate = birthdayDate;
-    }
-
-    //maritalStatus
-    public String getMaritalStatus() {
-        return maritalStatus;
-    }
-
-    public void setMaritalStatus(String maritalStatus) {
-        this.maritalStatus = maritalStatus;
-    }
-
-    //tckn
-    public String getTckn() {
+    @Override
+    public String getUsername() {
         return tckn;
     }
 
-    public void setTckn(String tckn) {
-        this.tckn = tckn;
-    }
-
-    //employeeNumber
-    public int getEmployeeNumber() {
-        return employeeNumber;
-    }
-
-    public void setEmployeeNumber(int employeeNumber) {
-        this.employeeNumber = employeeNumber;
-    }
-
-    //educationalStatus
-    public String getEducationalStatus() {
-        return educationalStatus;
-    }
-
-    public void setEducationalStatus(String educationalStatus) {
-        this.educationalStatus = educationalStatus;
-    }
-
-    //department
-    public String getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(String department) {
-        this.department = department;
-    }
-
-    //position
-    public String getPosition() {
-        return position;
-    }
-    public void setPosition(String position) {
-        this.position = position;
-    }
-
-    //stillWork
-    public boolean isStillWork() {
-        return stillWork;
-    }
-
-    public void setStillWork(boolean stillWork) {
-        this.stillWork = stillWork;
-    }
-
-    //profilePicture
-    public String getProfilePicture() {
-        return profilePicture;
-    }
-
-    public void setProfilePicture(String profilePicture) {
-        this.profilePicture = profilePicture;
-    }
-
-    //roles
-    public Set<String> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<String> roles) {
-        this.roles = roles != null ? roles : new HashSet<>();
-    }
-
-    //Password
+    @Override
     public String getPassword() {
         return password;
     }
@@ -222,4 +110,149 @@ public class Personal {
         this.password = password;
     }
 
+    // Constructors
+
+    public Personal() {
+    }
+
+    public Personal(String name, String surname, String gender, Date birthdayDate, String maritalStatus, String tckn,
+                    String employeeNumber, String educationalStatus, String department, String position, boolean stillWork,
+                    String profilePicture, String password, Set<String> roles) {
+        this.name = name;
+        this.surname = surname;
+        this.gender = gender;
+        this.birthdayDate = birthdayDate;
+        this.maritalStatus = maritalStatus;
+        this.tckn = tckn;
+        this.employeeNumber = employeeNumber;
+        this.educationalStatus = educationalStatus;
+        this.department = department;
+        this.position = position;
+        this.stillWork = stillWork;
+        this.profilePicture = profilePicture;
+        this.password = password;
+        this.roles = roles != null ? roles : new HashSet<>();
+    }
+
+    // Getters and Setters
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public Date getBirthdayDate() {
+        return birthdayDate;
+    }
+
+    public void setBirthdayDate(Date birthdayDate) {
+        this.birthdayDate = birthdayDate;
+    }
+
+    public String getMaritalStatus() {
+        return maritalStatus;
+    }
+
+    public void setMaritalStatus(String maritalStatus) {
+        this.maritalStatus = maritalStatus;
+    }
+
+    public String getTckn() {
+        return tckn;
+    }
+
+    public void setTckn(String tckn) {
+        this.tckn = tckn;
+    }
+
+    public String getEmployeeNumber() {
+        return employeeNumber;
+    }
+
+    public void setEmployeeNumber(String employeeNumber) {
+        this.employeeNumber = employeeNumber;
+    }
+
+    public String getEducationalStatus() {
+        return educationalStatus;
+    }
+
+    public void setEducationalStatus(String educationalStatus) {
+        this.educationalStatus = educationalStatus;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
+    public boolean isStillWork() {
+        return stillWork;
+    }
+
+    public void setStillWork(boolean stillWork) {
+        this.stillWork = stillWork;
+    }
+
+    public String getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
+    }
+
+    public Set<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<String> roles) {
+        this.roles = roles != null ? roles : new HashSet<>();
+    }
+
+    public List<Token> getTokens() {
+        return tokens;
+    }
+
+    public void setTokens(List<Token> tokens) {
+        this.tokens = tokens;
+    }
 }
