@@ -40,7 +40,10 @@ public class JwtService {
     public boolean isValid(String token, UserDetails user) {
         String username = extractUsername(token);
 
-        boolean validToken = tokenRepository.findByAccessToken(token).map(t -> !t.isLoggedOut()).orElse(false);
+        boolean validToken = tokenRepository
+                .findByAccessToken(token)
+                .map(t -> !t.isLoggedOut())
+                .orElse(false);
 
         return (username.equals(user.getUsername())) && !isTokenExpired(token) && validToken;
     }
@@ -48,7 +51,10 @@ public class JwtService {
     public boolean isValidRefreshToken(String token, Personal user) {
         String username = extractUsername(token);
 
-        boolean validRefreshToken = tokenRepository.findByRefreshToken(token).map(t -> !t.isLoggedOut()).orElse(false);
+        boolean validRefreshToken = tokenRepository
+                .findByRefreshToken(token)
+                .map(t -> !t.isLoggedOut())
+                .orElse(false);
 
         return (username.equals(user.getTckn())) && !isTokenExpired(token) && validRefreshToken;
     }
@@ -67,7 +73,11 @@ public class JwtService {
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts.parserBuilder().setSigningKey(getSigninKey()).build().parseClaimsJws(token).getBody();
+        return Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 
     public String generateAccessToken(Personal user) {
@@ -83,11 +93,11 @@ public class JwtService {
                 .setSubject(user.getTckn())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expireTime))
-                .signWith(SignatureAlgorithm.HS256, getSigninKey())
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    private SecretKey getSigninKey() {
+    private SecretKey getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }

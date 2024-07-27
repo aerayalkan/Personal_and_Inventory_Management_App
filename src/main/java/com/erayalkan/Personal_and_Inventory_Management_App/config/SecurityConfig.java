@@ -1,6 +1,6 @@
 package com.erayalkan.Personal_and_Inventory_Management_App.config;
 
-import com.erayalkan.Personal_and_Inventory_Management_App.filter.JwtRequestFilter;
+import com.erayalkan.Personal_and_Inventory_Management_App.config.JwtRequestFilter;
 import com.erayalkan.Personal_and_Inventory_Management_App.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,7 +31,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .csrf().disable()
+                .csrf(csrf -> csrf.disable()) // Updated line
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/personal/**").hasRole("HR")
