@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class PersonalService {
@@ -24,6 +26,14 @@ public class PersonalService {
 
     public Personal createPersonal(Personal personal) {
         personal.setPassword(passwordEncoder.encode(personal.getPassword())); // Encode the password before saving
+
+        // Rol ataması
+        if (personal.getRoles() == null || personal.getRoles().isEmpty()) {
+            Set<String> roles = new HashSet<>();
+            roles.add("ROLE_USER");
+            personal.setRoles(roles);
+        }
+
         return personelRepository.save(personal);
     }
 

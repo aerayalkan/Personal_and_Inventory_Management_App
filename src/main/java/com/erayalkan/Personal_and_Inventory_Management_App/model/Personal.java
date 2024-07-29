@@ -57,6 +57,8 @@ public class Personal implements UserDetails {
 
     @NotNull
     @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "roles", joinColumns = @JoinColumn(name = "personal_id"))
+    @Column(name = "role")
     private Set<String> roles = new HashSet<>();
 
     @NotBlank
