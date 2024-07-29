@@ -1,6 +1,7 @@
 package com.erayalkan.Personal_and_Inventory_Management_App.service;
 
 import com.erayalkan.Personal_and_Inventory_Management_App.model.Personal;
+import com.erayalkan.Personal_and_Inventory_Management_App.model.Role;
 import com.erayalkan.Personal_and_Inventory_Management_App.repository.PersonelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,11 +28,8 @@ public class PersonalService {
     public Personal createPersonal(Personal personal) {
         personal.setPassword(passwordEncoder.encode(personal.getPassword())); // Encode the password before saving
 
-        // Rol ataması
-        if (personal.getRoles() == null || personal.getRoles().isEmpty()) {
-            Set<String> roles = new HashSet<>();
-            roles.add("ROLE_USER");
-            personal.setRoles(roles);
+        if (personal.getRole() == null || personal.getRole().isEmpty()) {
+            personal.setRole("ROLE_USER");
         }
 
         return personelRepository.save(personal);
@@ -60,7 +58,7 @@ public class PersonalService {
             existingPersonal.setDepartment(personal.getDepartment());
             existingPersonal.setPosition(personal.getPosition());
             existingPersonal.setStillWork(personal.isStillWork());
-            existingPersonal.setRoles(personal.getRoles());
+            existingPersonal.setRole(personal.getRole());
             if (personal.getPassword() != null && !personal.getPassword().isEmpty()) {
                 existingPersonal.setPassword(passwordEncoder.encode(personal.getPassword())); // Encode the password before updating
             }

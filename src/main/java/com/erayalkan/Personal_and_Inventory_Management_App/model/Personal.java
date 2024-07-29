@@ -56,10 +56,8 @@ public class Personal implements UserDetails {
     private String profilePicture;
 
     @NotNull
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "roles", joinColumns = @JoinColumn(name = "personal_id"))
-    @Column(name = "role")
-    private Set<String> roles = new HashSet<>();
+    @Column(name = "role", nullable = false)
+    private String role;
 
     @NotBlank
     @ValidPassword
@@ -72,9 +70,7 @@ public class Personal implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
-        for (String role : roles) {
-            authorities.add(new SimpleGrantedAuthority(role));
-        }
+        authorities.add(new SimpleGrantedAuthority(role));
         return authorities;
     }
 
@@ -133,7 +129,7 @@ public class Personal implements UserDetails {
         this.stillWork = stillWork;
         this.profilePicture = profilePicture;
         this.password = password;
-        this.roles = roles != null ? roles : new HashSet<>();
+        this.role = role != null ? role : "ROLE_USER";
     }
 
     // Getters and Setters
@@ -242,12 +238,12 @@ public class Personal implements UserDetails {
         this.profilePicture = profilePicture;
     }
 
-    public Set<String> getRoles() {
-        return roles;
+    public String getRole() {
+        return role;
     }
 
-    public void setRoles(Set<String> roles) {
-        this.roles = roles != null ? roles : new HashSet<>();
+    public void setRole(String role) {
+        this.role = role != null ? role : "ROLE_USER";
     }
 
     public List<Token> getTokens() {
