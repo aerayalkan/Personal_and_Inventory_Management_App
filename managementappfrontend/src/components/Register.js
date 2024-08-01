@@ -43,17 +43,24 @@ const Register = () => {
         <div>
             <h2>Register</h2>
             <form onSubmit={handleSubmit}>
-                <input type="text" name="name" placeholder="Name" onChange={handleChange} required />
-                <input type="text" name="surname" placeholder="Surname" onChange={handleChange} required />
-                <input type="text" name="gender" placeholder="Gender" onChange={handleChange} required />
-                <input type="date" name="birthdayDate" placeholder="Birthday Date" onChange={handleChange} required />
-                <input type="text" name="maritalStatus" placeholder="Marital Status" onChange={handleChange} required />
-                <input type="text" name="tckn" placeholder="TCKN" onChange={handleChange} required />
-                <input type="text" name="employeeNumber" placeholder="Employee Number" onChange={handleChange} required />
-                <input type="text" name="educationalStatus" placeholder="Educational Status" onChange={handleChange} required />
-                <input type="text" name="department" placeholder="Department" onChange={handleChange} required />
-                <input type="text" name="position" placeholder="Position" onChange={handleChange} required />
-                <input type="password" name="password" placeholder="Password" onChange={handleChange} required />
+                <input type="text" name="name" placeholder="Name" onChange={handleChange} required/>
+                <input type="text" name="surname" placeholder="Surname" onChange={handleChange} required/>
+                <input type="text" name="gender" placeholder="Gender" onChange={handleChange} required/>
+                <input type="date" name="birthdayDate" placeholder="Birthday Date" onChange={handleChange} required/>
+                <input type="text" name="maritalStatus" placeholder="Marital Status" onChange={handleChange} required/>
+                <input type="text" name="tckn" placeholder="TCKN" onChange={handleChange} required/>
+                <input type="text" name="employeeNumber" placeholder="Employee Number" onChange={handleChange}
+                       required/>
+                <input type="text" name="educationalStatus" placeholder="Educational Status" onChange={handleChange}
+                       required/>
+                <input type="text" name="department" placeholder="Department" onChange={handleChange} required/>
+                <input type="text" name="position" placeholder="Position" onChange={handleChange} required/>
+                <select name="role" onChange={handleChange} required>
+                    <option value="ROLE_USER">User</option>
+                    <option value="ROLE_BOSS">Boss</option>
+                    <option value="ROLE_ADMIN">Admin</option>
+                </select>
+                <input type="password" name="password" placeholder="Password" onChange={handleChange} required/>
                 <button type="submit">Register</button>
             </form>
         </div>
