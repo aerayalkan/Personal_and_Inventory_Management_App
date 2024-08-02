@@ -10,7 +10,7 @@ function Dashboard() {
                 setPersonalData(response.data);
             })
             .catch((error) => {
-                console.error('Veriler alınırken bir hata oluştu!', error);
+                console.error('Veriler alınırken bir hata oluştu', error);
             });
     }, []);
 

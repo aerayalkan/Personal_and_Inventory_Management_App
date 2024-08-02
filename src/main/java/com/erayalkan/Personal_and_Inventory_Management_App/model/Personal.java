@@ -37,6 +37,7 @@ public class Personal implements UserDetails {
     private String maritalStatus;
 
     @Column(nullable = false, unique = true)
+    @Size(max =11, min = 11)
     private String tckn;
 
     @NotNull
